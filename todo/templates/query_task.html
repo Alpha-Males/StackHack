@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h1>Query Tasks</h1>
+    <form action="" method="POST">
+    <div class="form-group">
+            Probable DueDate:
+            <input type="date" name="duedate">
+            </br>
+            status:
+            <select name="status">
+              {% for o in status %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select></br>
+            label:
+            <select name="label">
+              {% for o in label %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select></br>
+            priority:
+            <select name="priority">
+              {% for o in priority %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select>
+   </div>
+   <button class="btn btn-primary" type="submit" >submit</button>
+</form>
+</div>
+
+{% endblock content %}

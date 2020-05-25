@@ -1,14 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>currenly prefered by users</h1>
-{% for i in curr_skill %}
-<div class="jumbotron">
-  <h1 class="display-4">{{ i.title }}</h1>
-  <p class="lead">{{ i.content }}</p>
-  <hr class="my-4">
-  <p class="lead">
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-  </p>
-</div>
-{% endfor %}
+<h1>Home Page</h1>
+
 {% endblock content %}

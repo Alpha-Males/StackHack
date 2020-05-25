@@ -1,12 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container">
-    <h1>Add new Task for the skill</h1>
+    <h1>Add a new Task</h1>
     <form action="" method="POST">
     <div class="form-group">
-            <input type="text" name="title" class="form-control" placeholder="title" required>
-        </div>
+    		Enter Title:
+            <input type="text" name="title"  placeholder="title" required>
+            </br>
+            Probable DueDate:
+            <input type="date" name="duedate">
+            </br>
+            status:
+            <select name="status">
+              {% for o in status %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select></br>
+            label:
+            <select name="label">
+              {% for o in label %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select></br>
+            priority:
+            <select name="priority">
+              {% for o in priority %}
+              <option value="{{ o }}">{{ o }}</option>
+              {% endfor %}
+            </select>
    </div>
    <button class="btn btn-primary" type="submit" >submit</button>
 </form>
+</div>
 {% endblock content %}

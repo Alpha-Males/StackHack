@@ -4,7 +4,7 @@
 """
 
 
-import datetime
+from datetime import datetime
 import os
 import secrets
 
@@ -15,7 +15,7 @@ from PIL import Image
 
 
 from todo import app, db, bcrypt
-from todo.model import User, Todo, Tasks
+from todo.model import User, Tasks
 from todo.forms import RegistrationForm, LoginForm
 
 
@@ -61,8 +61,6 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     form = LoginForm()
-    print(form.validate_on_submit())
-
     if request.method == "POST":
         print(form.email.data)
         
@@ -72,7 +70,7 @@ def login():
             user.password, request.form.get("password")
         ):
             login_user(user)
-            return redirect(url_for("skills"))
+            return redirect(url_for("todo"))
             
     return render_template("login.html", form=form)
 
@@ -95,51 +93,69 @@ def register():
     return render_template("register.html", form=form)
 
 
-@app.route("/todo", methods=["GET", "POST"])
+@app.route("/tasks", methods=["GET", "POST"])
 @login_required
 def tasks():
     curr_user = current_user.id
-    todo = Todo.query.filter_by(user_id=curr_user).all()
-    
-    task_info=[]
+    task=[]
     """
     todo info title,adddate, duedate
     task info title,priority, label, datetime
     """
 
-    return render_template("tasks.html", todo=todo, task_info=task_info)
+    return render_template("task.html",task=task)
 
 
 
 
 
-@app.route("/todo/tasks", methods=["GET", "POST"])
+@app.route("/query_tasks", methods=["GET", "POST"])
 @login_required
 def query_task():
-    var = request.args.get("my_var")
-    # var may be priority -> [1, 2, 3], datetime, label -> [personal, work, shopping, other]
-    task = Tasks.query.filter_by().all()
-    return render_template("query_task.html", task=task, var=var)
+    priority = ['argent', 'important', 'do-it-now']
+    label = ['personal', 'work', 'shopping', 'other']
+    status = ['new', 'progess', 'completed']
+    if request.method == "POST":
+        due_date = request.form.get("duedate")
+        priority = request.form.get("priority")
+        status = request.form.get("status")
+        label = request.form.get("label")
+        task = Tasks.query.filter_by(priority=priority).all()
+        print(task)
+        return redirect(url_for("task"))
+
+    return render_template("query_task.html",priority=priority, label=label, status=status)
 
 
-@app.route("/todo/add_task", methods=["GET", "POST"])
+@app.route("/add_task", methods=["GET", "POST"])
 @login_required
 def add_task():
-    var = request.args.get("my_var")
+    curr_user = current_user.id
+    priority = ['argent', 'important', 'do-it-now']
+    label = ['personal', 'work', 'shopping', 'other']
+    status = ['new', 'progess', 'completed']
     if request.method == "POST":
         title = request.form.get("title")
+        add_date = datetime.now()
+        due_date = request.form.get("duedate")
+        due_date = datetime.strptime(due_date, '%Y-%m-%d')
+        priority = request.form.get("priority")
+        status = request.form.get("status")
+        label = request.form.get("label")
+        task=Tasks(title=title,adddate=add_date,
+            duedate=due_date,priority=priority,status=status,label=label,user_id=curr_user)
         """
         title,
         adddate,
         duedate,
         priority -> [1, 2, 3],
-        label -> [personal, work, shopping, other]
+        label -> [personal, work, shopping, other],
         status -> [new, progess, completed]
         """
-        db.session.add(todo)
+        db.session.add(task)
         db.session.commit()
         return redirect(url_for("home"))
-    return render_template("add_task.html")
+    return render_template("add_task.html", priority=priority, label=label, status=status)
 
 
 @app.route("/logout")
