@@ -1,5 +1,17 @@
 """
 
+Routes:
+ 
+home -->
+save_and_upload -->
+account -->
+login -->
+register -->
+tasks -->
+query_task -->
+add_task -->
+logout -->
+
 
 """
 
@@ -7,6 +19,7 @@
 from datetime import datetime
 import os
 import secrets
+# import urllib
 
 
 from flask import render_template, flash, url_for, redirect, request
@@ -65,12 +78,12 @@ def login():
         print(form.email.data)
         
         user = User.query.filter_by(email=request.form.get("username")).first()
-        
+        print(user.password)
         if user and bcrypt.check_password_hash(
             user.password, request.form.get("password")
         ):
             login_user(user)
-            return redirect(url_for("todo"))
+            return redirect(url_for("tasks"))
             
     return render_template("login.html", form=form)
 
@@ -85,7 +98,7 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirm = request.form.get("confirm")
-        hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+        hashed_password = bcrypt.generate_password_hash(password)
         user = User(username=username, email=email, password=hashed_password)
         db.session.add(user)
         db.session.commit()
@@ -98,15 +111,15 @@ def register():
 def tasks():
     curr_user = current_user.id
     task=[]
+    ids=request.args.to_dict()
+    ids=ids['id'].split(':')
+    task = Tasks.query.filter(Tasks.id.in_(ids)).all()
+    
     """
-    todo info title,adddate, duedate
-    task info title,priority, label, datetime
+    task info title,adddate,duedate,priority, label, datetime
     """
 
-    return render_template("task.html",task=task)
-
-
-
+    return render_template("task.html",tasks=task)
 
 
 @app.route("/query_tasks", methods=["GET", "POST"])
@@ -121,8 +134,10 @@ def query_task():
         status = request.form.get("status")
         label = request.form.get("label")
         task = Tasks.query.filter_by(priority=priority).all()
-        print(task)
-        return redirect(url_for("task"))
+        id=''
+        for i in task:
+            id+=':'+str(i.id)
+        return redirect(url_for("tasks",id=id))
 
     return render_template("query_task.html",priority=priority, label=label, status=status)
 
@@ -148,7 +163,7 @@ def add_task():
         title,
         adddate,
         duedate,
-        priority -> [1, 2, 3],
+        priority -> ['argent', 'important', 'do-it-now'],
         label -> [personal, work, shopping, other],
         status -> [new, progess, completed]
         """
