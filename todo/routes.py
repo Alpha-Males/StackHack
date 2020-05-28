@@ -1,5 +1,4 @@
 """
-
 Routes:
  
 home -->
@@ -14,6 +13,9 @@ logout -->
 
 
 """
+
+# User Auth with REST architecture is provided only after doing some research.
+# Apart from User Auth everything must interact with ORM throug a middleware having REST architecture
 
 
 from datetime import datetime
@@ -110,15 +112,22 @@ def register():
 @login_required
 def tasks():
     curr_user = current_user.id
-    task=[]
-    ids=request.args.to_dict()
-    ids=ids['id'].split(':')
-    task = Tasks.query.filter(Tasks.id.in_(ids)).all()
     
+    # get request with a string haing list of ids
+
+    task=[]
+    
+    ids=request.args.to_dict()
+    if ids:
+        ids=ids['id'].split(':')
+        task = Tasks.query.filter(Tasks.id.in_(ids)).all()
+        return render_template("task.html",tasks=task)
+            
+    task = Tasks.query.filter().all()
+
     """
     task info title,adddate,duedate,priority, label, datetime
     """
-
     return render_template("task.html",tasks=task)
 
 
@@ -128,11 +137,13 @@ def query_task():
     priority = ['argent', 'important', 'do-it-now']
     label = ['personal', 'work', 'shopping', 'other']
     status = ['new', 'progess', 'completed']
+
     if request.method == "POST":
         due_date = request.form.get("duedate")
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
+
         task = Tasks.query.filter_by(priority=priority).all()
         id=''
         for i in task:
@@ -157,6 +168,9 @@ def add_task():
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
+
+        # post request with json object having these fields
+
         task=Tasks(title=title,adddate=add_date,
             duedate=due_date,priority=priority,status=status,label=label,user_id=curr_user)
         """
@@ -166,6 +180,9 @@ def add_task():
         priority -> ['argent', 'important', 'do-it-now'],
         label -> [personal, work, shopping, other],
         status -> [new, progess, completed]
+        A REST api call to insert data into the database 
+        test object must be serialized 
+              
         """
         db.session.add(task)
         db.session.commit()

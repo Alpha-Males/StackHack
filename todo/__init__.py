@@ -7,6 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from werkzeug.utils import secure_filename
+from flask_restful import Api
 
 #
 app = Flask(__name__)
@@ -17,6 +18,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+api = Api(app)
+
 
 #
 login_manager.login_view = "login"
@@ -28,3 +31,7 @@ ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
 
 #
 from todo import routes
+
+from todo.middleware import TodoRes
+
+api.add_resource(TodoRes, '/todores/<string:ids>','/todores/id')
