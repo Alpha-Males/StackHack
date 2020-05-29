@@ -69,7 +69,7 @@ Note : If you complete any or all of the above mentioned levels please do submit
     cd StackHack
     virtualenv venv
     source venv/bin/activate
-    pip install -r requirements.txt
+    pip install -r requirements.txt && pip3 install -r requirements.txt
 
     run python3 run.py
 
