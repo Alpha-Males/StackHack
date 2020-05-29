@@ -31,7 +31,7 @@ from PIL import Image
 
 from todo import app, db, bcrypt
 from todo.model import User, Tasks
-from todo.forms import RegistrationForm, LoginForm
+
 
 
 allowed_extensions = ["jpg", "png", "ppm"]
@@ -75,9 +75,7 @@ def account():
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    form = LoginForm()
     if request.method == "POST":
-        print(form.email.data)
         
         user = User.query.filter_by(email=request.form.get("username")).first()
         print(user.password)
@@ -86,15 +84,18 @@ def login():
         ):
             login_user(user)
             return redirect(url_for("tasks"))
+        else:
+            flash(u'Invalid password provided', 'error')
+            return redirect('/login')
             
-    return render_template("login.html", form=form)
+    return render_template("login.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    form = RegistrationForm()
+    
     if request.method == "POST":
         username = request.form.get("username")
         email = request.form.get("email")
@@ -105,7 +106,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         return redirect(url_for("login"))
-    return render_template("register.html", form=form)
+    return render_template("register.html")
 
 
 @app.route("/tasks", methods=["GET", "POST"])
@@ -113,7 +114,7 @@ def register():
 def tasks():
     curr_user = current_user.id
     
-    # get request with a string haing list of ids
+    # get request with a string having list of ids
 
     task=[]
     
@@ -123,7 +124,7 @@ def tasks():
         task = Tasks.query.filter(Tasks.id.in_(ids)).all()
         return render_template("task.html",tasks=task)
             
-    task = Tasks.query.filter().all()
+    #task = Tasks.query.filter().all()
 
     """
     task info title,adddate,duedate,priority, label, datetime
