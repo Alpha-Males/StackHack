@@ -2,6 +2,7 @@
 Routes:
  
 home -->
+about -->
 save_and_upload -->
 account -->
 login -->
@@ -36,6 +37,15 @@ from todo.model import User, Tasks
 
 allowed_extensions = ["jpg", "png", "ppm"]
 
+def checkavl(email,username):
+    user=User.query.filter_by(username=username).first()
+    if user:
+        return False
+    user=User.query.filter_by(email=email).first()
+    if user:
+        return False
+
+    return True
 
 @app.route("/")
 def home():
@@ -44,6 +54,12 @@ def home():
     """
     return render_template("home.html")
 
+@app.route("/about")
+def about():
+    """
+    
+    """
+    return render_template("about.html")
 
 def save_and_upload(file):
     random_hex = secrets.token_hex(8)
@@ -101,11 +117,17 @@ def register():
         email = request.form.get("email")
         password = request.form.get("password")
         confirm = request.form.get("confirm")
-        hashed_password = bcrypt.generate_password_hash(password)
-        user = User(username=username, email=email, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for("login"))
+
+        if password == confirm and checkavl(email,username):
+            hashed_password = bcrypt.generate_password_hash(password)
+            user = User(username=username, email=email, password=hashed_password)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for("login"))
+        
+        else:
+            flash(u'Invalid password provided', 'error')
+            
     return render_template("register.html")
 
 
@@ -116,11 +138,11 @@ def tasks():
     
     # get request with a string having list of ids
 
-    task=[]
+    task = []
     
     ids=request.args.to_dict()
     if ids:
-        ids=ids['id'].split(':')
+        ids = ids['id'].split(':')
         task = Tasks.query.filter(Tasks.id.in_(ids)).all()
         return render_template("task.html",tasks=task)
             

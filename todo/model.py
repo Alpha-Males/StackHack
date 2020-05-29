@@ -39,7 +39,3 @@ class Tasks(db.Model, UserMixin):
 
     def __repr__(self):
         return f"Todo('{self.id}' '{self.title}','{self.adddate}','{self.duedate}','{self.user_id}','{self.label}','{self.priority}','{self.status}')"
-
-
-
-

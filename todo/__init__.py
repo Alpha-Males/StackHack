@@ -34,4 +34,4 @@ from todo import routes
 
 from todo.middleware import TodoRes
 
-api.add_resource(TodoRes, '/todores/<string:ids>','/todores/id')
+api.add_resource(TodoRes, "/todores/<string:ids>", "/todores/id")
