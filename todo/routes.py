@@ -3,7 +3,6 @@ Routes:
 
 home -->
 about -->
-save_and_upload -->
 account -->
 login -->
 register -->
@@ -21,6 +20,7 @@ logout -->
 
 from datetime import datetime
 import os
+import requests
 import secrets
 # import urllib
 
@@ -110,6 +110,8 @@ def login():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
+    fields = {}
+    fields['route'] = 'register'
 
     if request.method == "POST":
         username = request.form.get("username")
@@ -119,9 +121,10 @@ def register():
 
         if password == confirm and checkavl(email,username):
             hashed_password = bcrypt.generate_password_hash(password)
-            user = User(username=username, email=email, password=hashed_password)
-            db.session.add(user)
-            db.session.commit()
+            fields['username'] = username
+            fields['email'] = email
+            fields['password'] = hashed_password
+            res=requests.post('http://127.0.0.1:5000/todores/id',data=fields)
             return redirect(url_for("login"))
 
         else:
@@ -133,29 +136,31 @@ def register():
 @app.route("/tasks", methods=["GET", "POST"])
 @login_required
 def tasks():
+    """
+    task info title,adddate,duedate,priority, label, datetime
+
+    """
     curr_user = current_user.id
 
     # get request with a string having list of ids
 
     task = []
 
+
     ids=request.args.to_dict()
     if ids:
         ids = ids['id'].split(':')
         task = Tasks.query.filter(Tasks.id.in_(ids)).all()
+
         return render_template("task.html",tasks=task)
 
-    #task = Tasks.query.filter().all()
-
-    """
-    task info title,adddate,duedate,priority, label, datetime
-    """
     return render_template("task.html",tasks=task)
 
 
 @app.route("/query_tasks", methods=["GET", "POST"])
 @login_required
 def query_task():
+
     priority = ['argent', 'important', 'do-it-now']
     label = ['personal', 'work', 'shopping', 'other']
     status = ['new', 'progess', 'completed']
@@ -166,7 +171,6 @@ def query_task():
         status = request.form.get("status")
         label = request.form.get("label")
 
-        task = Tasks.query.filter_by(priority=priority).all()
         id=''
         for i in task:
             id+=':'+str(i.id)
@@ -178,7 +182,19 @@ def query_task():
 @app.route("/add_task", methods=["GET", "POST"])
 @login_required
 def add_task():
+    """
+    title,
+    adddate,
+    duedate,
+    priority -> ['argent', 'important', 'do-it-now'],
+    label -> [personal, work, shopping, other],
+    status -> [new, progess, completed]
+    A REST api call to insert data into the database
+    test object must be serialized
+
+    """
     curr_user = current_user.id
+    print(curr_user)
     priority = ['argent', 'important', 'do-it-now']
     label = ['personal', 'work', 'shopping', 'other']
     status = ['new', 'progess', 'completed']
@@ -186,33 +202,23 @@ def add_task():
         title = request.form.get("title")
         add_date = datetime.now()
         due_date = request.form.get("duedate")
-        due_date = datetime.strptime(due_date, '%Y-%m-%d')
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
+
         fields = {}
+        fields['route'] = 'add_task'
         fields['title'] = title
         fields['add_date'] = add_date
         fields['due_date'] = due_date
         fields['priority'] = priority
         fields['status'] = status
         fields['label'] = label
+        fields['curr_user'] =curr_user
 
-        task=Tasks(title=title,adddate=add_date,
-            duedate=due_date,priority=priority,status=status,label=label,user_id=curr_user)
-        """
-        title,
-        adddate,
-        duedate,
-        priority -> ['argent', 'important', 'do-it-now'],
-        label -> [personal, work, shopping, other],
-        status -> [new, progess, completed]
-        A REST api call to insert data into the database
-        test object must be serialized
+        # API to interact with backend to POST data
+        res=requests.post('http://127.0.0.1:5000/todores/id',data=fields)
 
-        """
-        db.session.add(task)
-        db.session.commit()
         return redirect(url_for("home"))
     return render_template("add_task.html", priority=priority, label=label, status=status)
 
