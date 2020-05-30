@@ -1,6 +1,6 @@
 """
 Routes:
- 
+
 home -->
 about -->
 save_and_upload -->
@@ -57,7 +57,7 @@ def home():
 @app.route("/about")
 def about():
     """
-    
+
     """
     return render_template("about.html")
 
@@ -92,7 +92,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     if request.method == "POST":
-        
+
         user = User.query.filter_by(email=request.form.get("username")).first()
         print(user.password)
         if user and bcrypt.check_password_hash(
@@ -103,15 +103,14 @@ def login():
         else:
             flash(u'Invalid password provided', 'error')
             return redirect('/login')
-            
-    return render_template("login.html")
 
+    return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    
+
     if request.method == "POST":
         username = request.form.get("username")
         email = request.form.get("email")
@@ -124,10 +123,10 @@ def register():
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("login"))
-        
+
         else:
-            flash(u'Invalid password provided', 'error')
-            
+            flash(u'validation error', 'error')
+
     return render_template("register.html")
 
 
@@ -135,17 +134,17 @@ def register():
 @login_required
 def tasks():
     curr_user = current_user.id
-    
+
     # get request with a string having list of ids
 
     task = []
-    
+
     ids=request.args.to_dict()
     if ids:
         ids = ids['id'].split(':')
         task = Tasks.query.filter(Tasks.id.in_(ids)).all()
         return render_template("task.html",tasks=task)
-            
+
     #task = Tasks.query.filter().all()
 
     """
@@ -191,8 +190,13 @@ def add_task():
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
-
-        # post request with json object having these fields
+        fields = {}
+        fields['title'] = title
+        fields['add_date'] = add_date
+        fields['due_date'] = due_date
+        fields['priority'] = priority
+        fields['status'] = status
+        fields['label'] = label
 
         task=Tasks(title=title,adddate=add_date,
             duedate=due_date,priority=priority,status=status,label=label,user_id=curr_user)
@@ -203,9 +207,9 @@ def add_task():
         priority -> ['argent', 'important', 'do-it-now'],
         label -> [personal, work, shopping, other],
         status -> [new, progess, completed]
-        A REST api call to insert data into the database 
-        test object must be serialized 
-              
+        A REST api call to insert data into the database
+        test object must be serialized
+
         """
         db.session.add(task)
         db.session.commit()

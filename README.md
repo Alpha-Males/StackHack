@@ -1,12 +1,12 @@
 **StackHack**
 =============
-      
+
 
     Build your way from frontend to backend using Stackhack1.0
 
 
 
-      
+
 **problem statement description**
 ---------------------------------
 
@@ -29,7 +29,7 @@ Plus Point (intermediate)
 
 Along with everything asked in Minimum Requirement :
 
-    Implement a feature to set Labels to Tasks like ‘Personal’, ‘Work’, ‘Shopping’ and ‘Others’. 
+    Implement a feature to set Labels to Tasks like ‘Personal’, ‘Work’, ‘Shopping’ and ‘Others’.
     Implement a feature to set the Status of the Tasks like ‘New’, ‘In progress’ and ‘Completed’.
     You are supposed to implement these features for an End-to-End stack, implementation will go on the Frontend as well as Backend.
     Store the relevant flags in the database.
@@ -43,7 +43,8 @@ Along with everything from the above two levels :
 
 Note : If you complete any or all of the above mentioned levels please do submit.
 
-      
+
+
 
 
 **Installation**
@@ -51,9 +52,9 @@ Note : If you complete any or all of the above mentioned levels please do submit
 
 
 
-      
 
-      
+
+
 **Prerequisites**
 ------------------
 
@@ -61,8 +62,8 @@ Note : If you complete any or all of the above mentioned levels please do submit
 
 
 
-**using** 
---------  
+**using**
+--------
 
 
     git clone https://github.com/princekrroshan01/StackHack/
@@ -72,6 +73,15 @@ Note : If you complete any or all of the above mentioned levels please do submit
     pip install -r requirements.txt && pip3 install -r requirements.txt
 
     run python3 run.py
+
+
+
+
+**Architecture**
+----------------
+![StackHack](StackHack.png)
+
+
 
 **TODO**
 --------

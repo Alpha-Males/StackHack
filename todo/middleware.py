@@ -1,5 +1,5 @@
 """
-Get request working 
+Get request working
 
 """
 
