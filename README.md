@@ -86,8 +86,10 @@ Note : If you complete any or all of the above mentioned levels please do submit
 **TODO**
 --------
 
-- [ ] use flask-restful to interact with REST-API
-- [ ] improve UI using bootstrap
+- [ x ] Use flask-restful to interact with REST-API.
+- [ ] Improve UI using bootstrap.
+- [ ] Add login using google.
+- [ ] Come up with an algorithm to sort task on the basis of priority due_date label and status.
 
 
 **Contributing**

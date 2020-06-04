@@ -37,6 +37,10 @@ from todo.model import User, Tasks
 
 allowed_extensions = ["jpg", "png", "ppm"]
 
+
+
+
+
 def checkavl(email,username):
     user=User.query.filter_by(username=username).first()
     if user:
@@ -124,7 +128,11 @@ def register():
             fields['username'] = username
             fields['email'] = email
             fields['password'] = hashed_password
+            # API to interact with backend to POST data
             res=requests.post('http://127.0.0.1:5000/todores/id',data=fields)
+            if res:
+                pass
+                # ...
             return redirect(url_for("login"))
 
         else:
@@ -146,6 +154,7 @@ def tasks():
 
     task = []
 
+    task = Tasks.query.filter_by(user_id=curr_user).all()
 
     ids=request.args.to_dict()
     if ids:
@@ -171,6 +180,7 @@ def query_task():
         status = request.form.get("status")
         label = request.form.get("label")
 
+        task = Tasks.query.filter_by(priority=priority,duedate=due_date,user_id=curr_user).all()
         id=''
         for i in task:
             id+=':'+str(i.id)
@@ -218,7 +228,9 @@ def add_task():
 
         # API to interact with backend to POST data
         res=requests.post('http://127.0.0.1:5000/todores/id',data=fields)
-
+        if res:
+            pass
+            # ...
         return redirect(url_for("home"))
     return render_template("add_task.html", priority=priority, label=label, status=status)
 
