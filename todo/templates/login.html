@@ -2,23 +2,37 @@
 {% block content %}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
+        
       {% endif %}
     {% endwith %}
-    <div class="container">
-        <h1>Login</h1>
-        <form action="" method="POST">
-            <div class="form-group">
-                <input type="text" name="username" class="form-control" placeholder="username" required>
-            </div>
-             <div class="form-group">
-                <input type="password" name="password" class="form-control" placeholder="password" required>
-            </div>
-            <button class="btn btn-primary" type="submit">Login</button>
-        </form>
-    </div>
+  <div class="main-block">
+    <div class="left-part">
+        <i class="fas fa-graduation-cap"></i>
+        <h1>Login to ToDo App</h1>
+        <div class="btn-group">
+          <a class="btn-item" href="/register">Do not have account</a>
+        </div>
+      </div>
+
+    <form class="reg" action="" method="POST">
+        <div class="title">
+          <i class="fas fa-pencil-alt"></i> 
+          <h2>Login</h2>
+        </div>
+        <div class="info">
+     
+          <input class="inp" type="text" name="username" placeholder="Email">
+          <input class="inp" type="password" name="password" placeholder="Password">
+
+        </div>
+ 
+        <button class="butt" class="btn btn-outline-info" type="submit">Submit</button>
+    </form>
+</div>
 {% endblock %}
+
+
+
+    
+  
+    

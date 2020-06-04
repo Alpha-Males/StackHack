@@ -1,14 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
-<h1>Task Description</h1>
 
+<div class="content-section">
+  <div class="row">
 {% for task in tasks %}
 
-<h1>{{ task.title }}</h1>
-<h1>{{ task.adddate }}</h1>
-<h1>{{ task.duedate }}</h1>
-<h1>{{ task.priority }}</h1>
-<h1>{{ task.label }}</h1>
+
+    <div class="col-sm">
+
+		<div class="card" style="width: 18rem;">
+		  <img class="card-img-top" src="{{ url_for('static', filename='work.jpeg') }}" alt="Card image cap">
+		  <div class="card-body">
+		    <h5 class="card-title">Card title</h5>
+			    <p>{{ task.title }}</p>
+				<p>{{ task.adddate }}</p>
+				<p>{{ task.duedate }}</p>
+				<p>{{ task.priority }}</p>
+				<p>{{ task.label }}</p>
+		    <a href="#" class="btn btn-primary">Go somewhere</a>
+		  </div>
+
+ </div>
+</div>
+
+
+
+
 
 {% endfor %}
+</div>
+</div>
 {% endblock content %}

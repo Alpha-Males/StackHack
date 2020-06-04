@@ -1,22 +1,27 @@
 {% extends "layout.html" %}
 {% block content %}
- <div class="content-section">
-      <div class="media">
-        <img class="rounded-circle account-img" src="{{ pro_pic }}">
-        <div class="media-body">
-          <h2 class="account-heading">{{ current_user.username }}</h2>
-          <p class="text-secondary">{{ current_user.email }}</p>
+
+<div class="main-block">
+
+      <div class="left-part">
+         <img src="{{ pro_pic }}"  class="rounded-circle" style="width:200px;height:180px;">
+      
+         <div class="media-body">
+          <h3 class="account-heading">{{ current_user.username }}</h3>
+          <h3 class="text-secondary">{{ current_user.email }}</h3>
         </div>
       </div>
+      
 
-<form method="POST" action="" enctype="multipart/form-data">
-    <div>
-      <input type="file" name="file">
-    </div>
-    <div>
-        <button type="submit" name="upload">upload</button>
-    </div>                   
-</form>
+      <form class="reg" method="POST" action="" enctype="multipart/form-data">
+          <div>
+            <input class="inp" type="file" name="file">
+          </div>
+          <div>
+              <button class="butt" type="submit" name="upload">upload</button>
+          </div>                   
+      </form>
+
+
 </div>
-
 {% endblock %}

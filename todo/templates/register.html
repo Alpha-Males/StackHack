@@ -1,22 +1,30 @@
 {% extends "layout.html"%}
 {% block content %}
  
+<div class="main-block">
+   
+      <div class="left-part">
+        <i class="fas fa-graduation-cap"></i>
+        <h1>Register to ToDo App</h1>
+        <div class="btn-group">
+          <a class="btn-item" href="/login">Already have account</a>
+        </div>
+      </div>
+      <form class="reg" action="" method="POST">
+        <div class="title">
+          <i class="fas fa-pencil-alt"></i> 
+          <h2>Register here</h2>
+        </div>
+        <div class="info">
+          <input class="inp" type="text" name="username" placeholder="Full name" required>
+          <input class="inp" type="text" name="email" placeholder="Email" required>
+          <input class="inp" type="password" name="password" placeholder="Password" required>
+          <input class="inp" type="password" name="confirm" placeholder="Confirm Password" required>
 
-<div class="container">
-    <h1>Register</h1>
-    <form action="" method="POST">
-        <div class="form-group">
-            <input type="text" name="username" class="form-control" placeholder="username" required>
         </div>
-        <div class="form-group">
-            <input type="text" name="email" class="form-control" placeholder="email" required>
-        </div>
-        <div class="form-group">
-            <input type="password" name="password" class="form-control" placeholder="password" required>
-        </div>
-        <div class="form-group">
-            <input type="password" name="confirm" class="form-control" placeholder="confirm password" required>
-        </div>
-        <button class="btn btn-primary" type="submit" >submit</button>
-    </form>
+
+        <button class="butt" type="submit">Submit</button>
+      </form>
+    
+</div>
 {% endblock %}
