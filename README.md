@@ -66,7 +66,7 @@ Note : If you complete any or all of the above mentioned levels please do submit
 --------
 
 
-    git clone https://github.com/princekrroshan01/StackHack/
+    git clone https://github.com/lims-with-autorecommendation/StackHack/
     cd StackHack
     virtualenv venv
     source venv/bin/activate
