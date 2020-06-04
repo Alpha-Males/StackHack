@@ -2,7 +2,7 @@
 {% block content %}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
-        
+
       {% endif %}
     {% endwith %}
   <div class="main-block">
@@ -12,20 +12,23 @@
         <div class="btn-group">
           <a class="btn-item" href="/register">Do not have account</a>
         </div>
+        <div class="btn-group">
+          <button class = btn-success onclick="window.location.href='{{ url_for('loging', my_var='regg' ) }}'">Login Using github</button>
+        </div>
       </div>
 
     <form class="reg" action="" method="POST">
         <div class="title">
-          <i class="fas fa-pencil-alt"></i> 
+          <i class="fas fa-pencil-alt"></i>
           <h2>Login</h2>
         </div>
         <div class="info">
-     
+
           <input class="inp" type="text" name="username" placeholder="Email">
           <input class="inp" type="password" name="password" placeholder="Password">
 
         </div>
- 
+
         <button class="butt" class="btn btn-outline-info" type="submit">Submit</button>
     </form>
 </div>
@@ -33,6 +36,6 @@
 
 
 
-    
-  
-    
+
+
+

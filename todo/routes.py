@@ -27,6 +27,7 @@ import secrets
 
 from flask import render_template, flash, url_for, redirect, request
 from flask_login import login_user, current_user, login_required, logout_user
+from flask_dance.contrib.github import make_github_blueprint, github
 from PIL import Image
 
 
@@ -37,7 +38,10 @@ from todo.model import User, Tasks
 
 allowed_extensions = ["jpg", "png", "ppm"]
 
-
+app.config["GITHUB_OAUTH_CLIENT_ID"] = "0cd2c183c8cefac1daf6"
+app.config["GITHUB_OAUTH_CLIENT_SECRET"] = "bd615912c583831900cda5bb8c27856664e18d6c"
+github_bp = make_github_blueprint()
+app.register_blueprint(github_bp, url_prefix="/login")
 
 
 
@@ -45,10 +49,6 @@ def checkavl(email,username):
     user=User.query.filter_by(username=username).first()
     if user:
         return False
-    user=User.query.filter_by(email=email).first()
-    if user:
-        return False
-
     return True
 
 @app.route("/")
@@ -91,14 +91,40 @@ def account():
     return render_template("account.html", pro_pic=pro_pic)
 
 
+
+
+
+@app.route("/loging")
+def loging():
+    if not github.authorized:
+        return redirect(url_for("github.login"))
+    resp = github.get("/user")
+    username=resp.json()['login']
+    email=resp.json()['email']
+    print(username,email)
+    user = User.query.filter_by(username=username).first()
+    if user == None and checkavl(email,username) == True:
+        user = User(username=username, email=email, password='no need')
+        db.session.add(user)
+        db.session.commit()
+    #else:
+        #login_user(user)
+    login_user(user)
+    return redirect(url_for('tasks'))
+
+
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    if request.method == "POST":
+    var = request.args.get('my_var')
+    if var == 'regg':
+        return redirect(url_for('loging'))
 
+    elif request.method == "POST":
         user = User.query.filter_by(email=request.form.get("username")).first()
-        print(user.password)
         if user and bcrypt.check_password_hash(
             user.password, request.form.get("password")
         ):
@@ -107,7 +133,6 @@ def login():
         else:
             flash(u'Invalid password provided', 'error')
             return redirect('/login')
-
     return render_template("login.html")
 
 @app.route("/register", methods=["GET", "POST"])
