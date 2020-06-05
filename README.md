@@ -65,20 +65,22 @@ Note : If you complete any or all of the above mentioned levels please do submit
 **using**
 --------
 
+```
+git clone https://github.com/lims-with-autorecommendation/StackHack/
+cd StackHack
 
-    git clone https://github.com/lims-with-autorecommendation/StackHack/
-    cd StackHack
-    virtualenv venv
-    source venv/bin/activate
-    pip install -r requirements.txt && pip3 install -r requirements.txt
+if you are using pipenv 
+pipenv install
 
-    run python3 run.py
+else
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt && pip3 install -r requirements.txt
+   
+run python3 run.py
+```
 
-
-    if you are using pipenv 
     
-    ``pipenv install``
-
 
 **Architecture**
 ----------------
@@ -98,5 +100,4 @@ Note : If you complete any or all of the above mentioned levels please do submit
 **Contributing**
 ----------------
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 
