@@ -71,12 +71,12 @@ cd StackHack
 
 if you are using pipenv 
 pipenv install
+pipenv run python3 run.py
 
 else
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt && pip3 install -r requirements.txt
-   
 run python3 run.py
 ```
 

@@ -18,10 +18,15 @@ logout -->
 # Apart from User Auth everything must interact with ORM throug a middleware having REST architecture
 
 
+# key = crpt.key_derive(b"data")  # api to calculate key using PKCS7
+# crpt.key_verify(b"data", key)  # api to verify the key
+
 from datetime import datetime
 import os
 import requests
 import secrets
+import hashlib
+
 # import urllib
 
 
@@ -35,7 +40,6 @@ from todo import app, db, bcrypt
 from todo.model import User, Tasks
 
 
-
 allowed_extensions = ["jpg", "png", "ppm"]
 
 app.config["GITHUB_OAUTH_CLIENT_ID"] = "0cd2c183c8cefac1daf6"
@@ -44,12 +48,12 @@ github_bp = make_github_blueprint()
 app.register_blueprint(github_bp, url_prefix="/login")
 
 
-
-def checkavl(email,username):
-    user=User.query.filter_by(username=username).first()
+def checkavl(email, username):
+    user = User.query.filter_by(username=username).first()
     if user:
         return False
     return True
+
 
 @app.route("/")
 def home():
@@ -58,12 +62,14 @@ def home():
     """
     return render_template("home.html")
 
+
 @app.route("/about")
 def about():
     """
 
     """
     return render_template("about.html")
+
 
 def save_and_upload(file):
     random_hex = secrets.token_hex(8)
@@ -80,8 +86,7 @@ def save_and_upload(file):
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    pro_pic = url_for("static", filename="profile_pics/"
-         + current_user.image_file)
+    pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)
     if request.method == "POST":
         file = request.files.get("file")
         picture_file = save_and_upload(file)
@@ -91,56 +96,53 @@ def account():
     return render_template("account.html", pro_pic=pro_pic)
 
 
-
-
-
 @app.route("/loging")
 def loging():
     if not github.authorized:
         return redirect(url_for("github.login"))
     resp = github.get("/user")
-    username=resp.json()['login']
-    email=resp.json()['email']
-    print(username,email)
+    username = resp.json()["login"]
+    email = resp.json()["email"]
+    print(username, email)
     user = User.query.filter_by(username=username).first()
-    if user == None and checkavl(email,username) == True:
-        user = User(username=username, email=email, password='no need')
+    if user == None and checkavl(email, username) == True:
+        user = User(username=username, email=email, password="no need")
         db.session.add(user)
         db.session.commit()
-    #else:
-        #login_user(user)
+    # else:
+    # login_user(user)
     login_user(user)
-    return redirect(url_for('tasks'))
-
-
+    return redirect(url_for("tasks"))
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    var = request.args.get('my_var')
-    if var == 'regg':
-        return redirect(url_for('loging'))
-
+    var = request.args.get("my_var")
+    if var == "regg":
+        return redirect(url_for("loging"))
     elif request.method == "POST":
         user = User.query.filter_by(email=request.form.get("username")).first()
-        if user and bcrypt.check_password_hash(
-            user.password, request.form.get("password")
+        if (
+            user
+            and user.password
+            == hashlib.sha224(request.form.get("password").encode("utf-8")).hexdigest()
         ):
             login_user(user)
             return redirect(url_for("tasks"))
         else:
-            flash(u'Invalid password provided', 'error')
-            return redirect('/login')
+            flash(u"Invalid password provided", "error")
+            return redirect("/login")
     return render_template("login.html")
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     fields = {}
-    fields['route'] = 'register'
+    fields["route"] = "register"
 
     if request.method == "POST":
         username = request.form.get("username")
@@ -148,20 +150,21 @@ def register():
         password = request.form.get("password")
         confirm = request.form.get("confirm")
 
-        if password == confirm and checkavl(email,username):
-            hashed_password = bcrypt.generate_password_hash(password)
-            fields['username'] = username
-            fields['email'] = email
-            fields['password'] = hashed_password
+        if password == confirm and checkavl(email, username):
+            hashed_password = hashlib.sha224(password.encode("utf-8")).hexdigest()
+            print(hashed_password)
+            fields["username"] = username
+            fields["email"] = email
+            fields["password"] = hashed_password
             # API to interact with backend to POST data
-            res=requests.post('http://127.0.0.1:5000/todores/id',data=fields)
+            res = requests.post("http://127.0.0.1:5000/todores/id", data=fields)
             if res:
                 pass
                 # ...
             return redirect(url_for("login"))
 
         else:
-            flash(u'validation error', 'error')
+            flash(u"validation error", "error")
 
     return render_template("register.html")
 
@@ -181,23 +184,23 @@ def tasks():
 
     task = Tasks.query.filter_by(user_id=curr_user).all()
 
-    ids=request.args.to_dict()
+    ids = request.args.to_dict()
     if ids:
-        ids = ids['id'].split(':')
+        ids = ids["id"].split(":")
         task = Tasks.query.filter(Tasks.id.in_(ids)).all()
 
-        return render_template("task.html",tasks=task)
+        return render_template("task.html", tasks=task)
 
-    return render_template("task.html",tasks=task)
+    return render_template("task.html", tasks=task)
 
 
 @app.route("/query_tasks", methods=["GET", "POST"])
 @login_required
 def query_task():
 
-    priority = ['argent', 'important', 'do-it-now']
-    label = ['personal', 'work', 'shopping', 'other']
-    status = ['new', 'progess', 'completed']
+    priority = ["argent", "important", "do-it-now"]
+    label = ["personal", "work", "shopping", "other"]
+    status = ["new", "progess", "completed"]
 
     if request.method == "POST":
         due_date = request.form.get("duedate")
@@ -205,13 +208,17 @@ def query_task():
         status = request.form.get("status")
         label = request.form.get("label")
 
-        task = Tasks.query.filter_by(priority=priority,duedate=due_date,user_id=curr_user).all()
-        id=''
+        task = Tasks.query.filter_by(
+            priority=priority, duedate=due_date, user_id=curr_user
+        ).all()
+        id = ""
         for i in task:
-            id+=':'+str(i.id)
-        return redirect(url_for("tasks",id=id))
+            id += ":" + str(i.id)
+        return redirect(url_for("tasks", id=id))
 
-    return render_template("query_task.html",priority=priority, label=label, status=status)
+    return render_template(
+        "query_task.html", priority=priority, label=label, status=status
+    )
 
 
 @app.route("/add_task", methods=["GET", "POST"])
@@ -230,9 +237,9 @@ def add_task():
     """
     curr_user = current_user.id
     print(curr_user)
-    priority = ['argent', 'important', 'do-it-now']
-    label = ['personal', 'work', 'shopping', 'other']
-    status = ['new', 'progess', 'completed']
+    priority = ["argent", "important", "do-it-now"]
+    label = ["personal", "work", "shopping", "other"]
+    status = ["new", "progess", "completed"]
     if request.method == "POST":
         title = request.form.get("title")
         add_date = datetime.now()
@@ -242,22 +249,24 @@ def add_task():
         label = request.form.get("label")
 
         fields = {}
-        fields['route'] = 'add_task'
-        fields['title'] = title
-        fields['add_date'] = add_date
-        fields['due_date'] = due_date
-        fields['priority'] = priority
-        fields['status'] = status
-        fields['label'] = label
-        fields['curr_user'] =curr_user
+        fields["route"] = "add_task"
+        fields["title"] = title
+        fields["add_date"] = add_date
+        fields["due_date"] = due_date
+        fields["priority"] = priority
+        fields["status"] = status
+        fields["label"] = label
+        fields["curr_user"] = curr_user
 
         # API to interact with backend to POST data
-        res=requests.post('http://127.0.0.1:5000/todores/id',data=fields)
+        res = requests.post("http://127.0.0.1:5000/todores/id", data=fields)
         if res:
             pass
             # ...
         return redirect(url_for("home"))
-    return render_template("add_task.html", priority=priority, label=label, status=status)
+    return render_template(
+        "add_task.html", priority=priority, label=label, status=status
+    )
 
 
 @app.route("/logout")
