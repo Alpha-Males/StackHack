@@ -152,7 +152,7 @@ def register():
 
         if password == confirm and checkavl(email, username):
             hashed_password = hashlib.sha224(password.encode("utf-8")).hexdigest()
-            user = User(username=username, email=email, password=password)
+            user = User(username=username, email=email, password=hashed_password)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for("login"))
