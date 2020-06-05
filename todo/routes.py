@@ -244,6 +244,7 @@ def add_task():
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
+        #due date must be selected
         task = Tasks(
             title=title,
             adddate=add_date,
