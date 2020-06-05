@@ -191,20 +191,22 @@ def tasks():
 @app.route("/query_tasks", methods=["GET", "POST"])
 @login_required
 def query_task():
-
+    curr_user = current_user.id
     priority = ["argent", "important", "do-it-now"]
     label = ["personal", "work", "shopping", "other"]
     status = ["new", "progess", "completed"]
 
     if request.method == "POST":
         due_date = request.form.get("duedate")
+        due_date = datetime.strptime(due_date, "%Y-%m-%d")
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
-
+        
         task = Tasks.query.filter_by(
             priority=priority, duedate=due_date, user_id=curr_user
         ).all()
+        
         id = ""
         for i in task:
             id += ":" + str(i.id)
@@ -238,6 +240,7 @@ def add_task():
         title = request.form.get("title")
         add_date = datetime.now()
         due_date = request.form.get("duedate")
+        due_date = datetime.strptime(due_date, "%Y-%m-%d")
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
