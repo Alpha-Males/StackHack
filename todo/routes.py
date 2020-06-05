@@ -152,15 +152,9 @@ def register():
 
         if password == confirm and checkavl(email, username):
             hashed_password = hashlib.sha224(password.encode("utf-8")).hexdigest()
-            print(hashed_password)
-            fields["username"] = username
-            fields["email"] = email
-            fields["password"] = hashed_password
-            # API to interact with backend to POST data
-            res = requests.post("http://127.0.0.1:5000/todores/id", data=fields)
-            if res:
-                pass
-                # ...
+            user = User(username=username, email=email, password=password)
+            db.session.add(user)
+            db.session.commit()
             return redirect(url_for("login"))
 
         else:
@@ -247,22 +241,17 @@ def add_task():
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
-
-        fields = {}
-        fields["route"] = "add_task"
-        fields["title"] = title
-        fields["add_date"] = add_date
-        fields["due_date"] = due_date
-        fields["priority"] = priority
-        fields["status"] = status
-        fields["label"] = label
-        fields["curr_user"] = curr_user
-
-        # API to interact with backend to POST data
-        res = requests.post("http://127.0.0.1:5000/todores/id", data=fields)
-        if res:
-            pass
-            # ...
+        task = Tasks(
+                title=title,
+                adddate=add_date,
+                duedate=due_date,
+                priority=priority,
+                status=status,
+                label=label,
+                user_id=curr_user,
+            )
+            db.session.add(task)
+            db.session.commit()
         return redirect(url_for("home"))
     return render_template(
         "add_task.html", priority=priority, label=label, status=status
