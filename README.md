@@ -75,6 +75,9 @@ Note : If you complete any or all of the above mentioned levels please do submit
     run python3 run.py
 
 
+    if you are using pipenv 
+    
+    ``pipenv install``
 
 
 **Architecture**
@@ -86,9 +89,9 @@ Note : If you complete any or all of the above mentioned levels please do submit
 **TODO**
 --------
 
-- [ x ] Use flask-restful to interact with REST-API.
+- [x] Use flask-restful to interact with REST-API.
 - [ ] Improve UI using bootstrap.
-- [ ] Add login using google.
+- [x] Add login using github.
 - [ ] Come up with an algorithm to sort task on the basis of priority due_date label and status.
 
 
