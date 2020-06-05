@@ -242,16 +242,16 @@ def add_task():
         status = request.form.get("status")
         label = request.form.get("label")
         task = Tasks(
-                title=title,
-                adddate=add_date,
-                duedate=due_date,
-                priority=priority,
-                status=status,
-                label=label,
-                user_id=curr_user,
-            )
-            db.session.add(task)
-            db.session.commit()
+            title=title,
+            adddate=add_date,
+            duedate=due_date,
+            priority=priority,
+            status=status,
+            label=label,
+            user_id=curr_user,
+        )
+        db.session.add(task)
+        db.session.commit()
         return redirect(url_for("home"))
     return render_template(
         "add_task.html", priority=priority, label=label, status=status
