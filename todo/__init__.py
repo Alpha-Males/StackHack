@@ -36,6 +36,4 @@ ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif"}
 #
 from todo import routes
 
-from todo.middleware import TodoRes
 
-api.add_resource(TodoRes, "/todores/<string:ids>", "/todores/id")
