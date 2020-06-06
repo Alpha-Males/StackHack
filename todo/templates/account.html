@@ -12,7 +12,6 @@
         </div>
       </div>
       
-
       <form class="reg" method="POST" action="" enctype="multipart/form-data">
           <div>
             <input class="inp" type="file" name="file">
@@ -22,6 +21,6 @@
           </div>                   
       </form>
 
-
+     <button class = btn-success onclick="window.location.href='{{ url_for('account', my_var='send_mail' ) }}'">Send Mail of My Tasks</button>
 </div>
 {% endblock %}
