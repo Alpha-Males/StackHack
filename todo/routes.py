@@ -48,6 +48,12 @@ github_bp = make_github_blueprint()
 app.register_blueprint(github_bp, url_prefix="/login")
 
 
+
+class RouteException(Exception):
+    pass
+
+
+
 def checkavl(email, username):
     user = User.query.filter_by(username=username).first()
     if user:
@@ -71,7 +77,7 @@ def about():
     return render_template("about.html")
 
 
-def save_and_upload(file):
+def save_and_upload(file):   
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(file.filename)
     picture_fn = random_hex + f_ext
@@ -89,9 +95,12 @@ def account():
     pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)
     if request.method == "POST":
         file = request.files.get("file")
-        picture_file = save_and_upload(file)
-        current_user.image_file = picture_file
-        db.session.commit()
+        if file:
+            picture_file = save_and_upload(file)
+            current_user.image_file = picture_file
+            db.session.commit()
+        else:
+            flash(u"choose a file to upload","error")
         return redirect(url_for("account"))
     return render_template("account.html", pro_pic=pro_pic)
 
@@ -132,7 +141,7 @@ def login():
             login_user(user)
             return redirect(url_for("tasks"))
         else:
-            flash(u"Invalid password provided", "error")
+            flash(u"Validation Error", "error")
             return redirect("/login")
     return render_template("login.html")
 
@@ -198,20 +207,22 @@ def query_task():
 
     if request.method == "POST":
         due_date = request.form.get("duedate")
-        due_date = datetime.strptime(due_date, "%Y-%m-%d")
-        priority = request.form.get("priority")
-        status = request.form.get("status")
-        label = request.form.get("label")
-        
-        task = Tasks.query.filter_by(
-            priority=priority, duedate=due_date, user_id=curr_user
-        ).all()
-        
-        id = ""
-        for i in task:
-            id += ":" + str(i.id)
-        return redirect(url_for("tasks", id=id))
-
+        if due_date:
+            due_date = datetime.strptime(due_date, "%Y-%m-%d")
+            priority = request.form.get("priority")
+            status = request.form.get("status")
+            label = request.form.get("label")
+            
+            task = Tasks.query.filter_by(
+                priority=priority, duedate=due_date, user_id=curr_user
+            ).all()
+            
+            id = ""
+            for i in task:
+                id += ":" + str(i.id)
+            return redirect(url_for("tasks", id=id))
+        else:
+            flash(u"please choose a duedate its mandetory","error")
     return render_template(
         "query_task.html", priority=priority, label=label, status=status
     )
