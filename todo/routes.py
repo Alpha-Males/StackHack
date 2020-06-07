@@ -157,6 +157,7 @@ def register():
         match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
         if match == None or verify_email(email)!=250:
             flash(u"please provide a valid email address", "error")
+            print("valid email")
         else:
             password = request.form.get("password")
             confirm = request.form.get("confirm")
@@ -168,6 +169,7 @@ def register():
                 return redirect(url_for("login"))
                 print("loggedin")
             else:
+                print("error")
                 flash(u"validation error", "error")
 
     return render_template("register.html")

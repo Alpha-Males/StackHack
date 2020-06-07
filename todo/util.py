@@ -68,4 +68,7 @@ def checkavl(email, username):
     user = User.query.filter_by(username=username).first()
     if user:
         return False
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return False
     return True
