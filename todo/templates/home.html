@@ -4,95 +4,16 @@
 
 {% if current_user.is_authenticated %}
 
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-		  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLongTitle">Add new Task</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-					     <form action="#" method="post" novalidate="novalidate">
-					      <div class="modal-body">
-					      		<div class="row">
-					                <div class="col-lg-12">
-					                		Enter Title:
-		            						<input type="text" name="title" class="form-control search-slt" placeholder="title" required>
-
-					                </div>
-					             </div>
-					                  <br>
-					            <div class="row">
-					                <div class="col-lg-12">
-
-					                    <div class="row">
-					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-					                            <input type="date" name="duedate" class="form-control search-slt" placeholder="Probable DueDate">
-					                        </div>
-
-					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-
-					                          <select class="form-control search-slt" id="exampleFormControlSelect1" name="status" >
-					                            {% for o in status %}
-					                            <option value="{{ o }}">{{ o }}</option>
-					                            {% endfor %}
-					                          </select>
-
-					                        </div>
-
-					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-
-					                          <select class="form-control search-slt" id="exampleFormControlSelect1" name="priority" >
-					                           {% for o in priority %}
-					                            <option value="{{ o }}">{{ o }}</option>
-					                           {% endfor %}
-					                          </select>
-
-					                        </div>
-
-					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-
-					                         <select class="form-control search-slt" id="exampleFormControlSelect1" name="label">
-					                          {% for o in label %}
-					                          <option value="{{ o }}">{{ o }}</option>
-					                          {% endfor %}
-					                        </select>
-
-					                        </div>
-
-					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
-					                         <select class="form-control search-slt" id="exampleFormControlSelect1" name="label">
-					                        
-					                          <option value="o">78</option>
-					                          <option value="o">78</option>
-					                          <option value="o">78</option>
-					                          
-					                        </select>
-					                    </div>
-
-					                    </div>
-					                </div>
-					            </div>
-
-				      		</div>
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					    <button class="btn btn-outline-success wrn-btn" type="submit" >submit</button>
-
-				      </div>
-		        </form>
-		    </div>
-		  </div>
-		</div>
-
 
 		<div class="row d-flex justify-content-center container-c">
 		    <div class="col-md-8">
 		        <div class="card-hover-shadow-2x mb-3 card">
 		            <div class="card-header-tab card-header">
-		                <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Today's Task List</div>
+		                <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Today's Task List
+
+		                 <p id="date" style="color:#00AFAF;margin-right: 10%;margin-left: 10% "></p>
+		                 <p id="time" style="color:#00AFAF; "></p>
+		                </div>
 		            </div>
 		            <div class="scroll-area-sm">
 		                <perfect-scrollbar class="ps-show-limits">
@@ -139,7 +60,8 @@
 
 		                                            <div class="widget-content-right">
 
-		                                            	<button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button><button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button>
+		                                            	<button class="border-0 btn-transition btn btn-outline-success" value="ON" id="done" onclick="task_done(this);"> <i class="fa fa-check"></i></button>
+		                                            	
 		                                             </div>
 		                                        </div>
 		                                    </div>
@@ -153,11 +75,10 @@
 		                    </div>
 		                </perfect-scrollbar>
 		            </div>
-		            <div class="d-block text-right card-footer"><button class="mr-2 btn btn-link btn-sm" ><a href="/tasks">All-Tasks</a></button>
-		            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
-					  Add
-					</button>
-
+		            <div class="d-block text-right card-footer">
+		            	<button class="mr-2 btn btn-link btn-sm" ><a href="/tasks">All-Tasks</a></button>
+		            	<button class="mr-2 btn btn-link btn-sm" ><a href="/add_task">Add a Task</a></button>
+		            
 		        </div>
 		    </div>
 		</div>

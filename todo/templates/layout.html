@@ -19,6 +19,50 @@
 		 <title>todo</title>
 		 {% endif %}
 </head>
+<script type="text/javascript"> 
+            function task_done(x) { 
+                if(x.value=="ON")
+                {
+                  x.className = "border-0 btn-transition btn btn-success"; 
+                  x.value='OFF';
+                }
+                else
+                {
+                   x.className = "border-0 btn-transition btn btn-outline-success"; 
+                  x.value='ON';
+                }
+                
+
+            } 
+
+
+    window.onload = setInterval(clock,1000);
+
+    function clock()
+    {
+    var d = new Date();
+    
+    var date = d.getDate();
+    
+    var month = d.getMonth();
+    var montharr =["Jan","Feb","Mar","April","May","June","July","Aug","Sep","Oct","Nov","Dec"];
+    month=montharr[month];
+    
+    var year = d.getFullYear();
+    
+    var day = d.getDay();
+    var dayarr =["Sun","Mon","Tues","Wed","Thurs","Fri","Sat"];
+    day=dayarr[day];
+    
+    var hour =d.getHours();
+      var min = d.getMinutes();
+    var sec = d.getSeconds();
+  
+    document.getElementById("date").innerHTML=day+" "+date+" "+month+" "+year;
+    document.getElementById("time").innerHTML=hour+":"+min+":"+sec;
+    }
+    
+ </script> 
     
 <body style=" background-image: url('{{ url_for('static', filename='back.jpg') }}');
              background-repeat: no-repeat;
@@ -44,14 +88,17 @@
                         <li>
                           <a class="nav-item nav-link" href="{{ url_for('tasks') }}" >Task</a>
                         </li>
-                        <li>
-                          <a class="nav-item nav-link" href="{{ url_for('logout') }}" >Logout</a>
-                          </li>
-                          <li>
+                       <li>
                           <a class="nav-item nav-link" href="{{ url_for('account') }}" >Profile</a>
                          </li>
+                        <li>
+                          <a class="nav-item nav-link" href="{{ url_for('logout') }}" >Logout</a>
+                        </li>
+                          <li>
+                          <a class="nav-item nav-link" href="{{ url_for('query_task') }}" >Search</a>
+                        </li>
 
-                
+                        
        
                         
                       {% else %}
@@ -65,10 +112,6 @@
                       
                     </ul>
 
-                    <form class="form-inline my-2 my-lg-0" href="#">
-                      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                      <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
-                    </form>
 
                   </div>
           </nav>

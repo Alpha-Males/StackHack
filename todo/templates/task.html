@@ -4,50 +4,95 @@
 
 <div class="container-c">
 
+
 <section class="search-sec">
+ <div class="card-header-tab card-header" style="width: 70%;margin-left: 15%">
+    <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Task List
 
-  <div class="row">
-{% for task in tasks %}
+     <p id="date" style="color:#00AFAF;margin-right: 10%;margin-left: 10% "></p>
+     <p id="time" style="color:#00AFAF; margin-right:30% "></p>
 
+		<button style="margin-left: 100%" class="mr-2 btn btn-link btn-sm" ><a href="/add_task">Add a Task</a></button>
 
-    <div class="col-sm-2">
-
-		<div class="card" style="width: 18rem;">
-		  {% if task.label=='work' %}
-   		 <img class="card-img-top" src="{{ url_for('static', filename='work.jpeg') }}" alt="Card image cap">
-    	{% elif task.label=='personal' %}
-    	<img class="card-img-top" src="{{ url_for('static', filename='personal.png') }}" alt="Card image cap">
-    	{% elif task.label=='shopping' %}
-    	<img class="card-img-top" src="{{ url_for('static', filename='shopping.jpeg') }}" alt="Card image cap">
-    	{% elif task.label=='other' %}
-    	<img class="card-img-top" src="{{ url_for('static', filename='other.jpeg') }}" alt="Card image cap">
-    	{% endif %}
-
-		  <div class="card-body">
-		    <h5 style="text-transform: uppercase;" class="card-title">{{ task.title }}</h5>
-		    <ul class="list-group list-group-flush">
-			    <li class="list-group-item">{{ task.adddate }}</li>
-			    <li class="list-group-item">{{ task.duedate }}</li>
-			    <li class="list-group-item">{{ task.label }}</li>
-			     <li class="list-group-item">
-			    	<div class="badge badge-danger ml-2">{{ task.priority }}</div>
-				</li>
-
-			 </ul>
-
-		    <a style="margin-top: 10px" href="#" class="btn btn-primary">Edit</a>
-		    <a style="margin-top: 10px" href="#" class="btn btn-danger">Remove</a>
-		  </div>
-
- </div>
+    </div>
 </div>
 
 
+<div class="row d-flex justify-content-center container-c">
+		    <div class="col-md-8">
+		        <div class="card-hover-shadow-2x mb-3 card">
+		            <div class="card-header-tab card-header">
+		                <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;All-Task List</div>
+		            </div>
+		            <div class="scroll-area-lg">
+		                <perfect-scrollbar class="ps-show-limits">
+		                    <div style="position: static;" class="ps ps--active-y">
+		                        <div class="ps-content">
+		                            <ul class=" list-group list-group-flush">
+
+		                            	{% for task in tasks %}
+<!-- label = ["personal", "work", "shopping", "other"] -->
+
+		                            	<li class="list-group-item">
+		                                    <div class="todo-indicator bg-warning"></div>
+		                                    <div class="widget-content p-0">
+		                                        <div class="widget-content-wrapper">
+		                                            <div class="widget-content-left mr-2">
+		                                            	{% if task.label=='work' %}
+		                                            	<div>
+		                                            		<img src="{{ url_for('static', filename='work.jpeg') }}" height="50%" width="50%">
+		                                            	</div>
+		                                            	{% elif task.label=='personal' %}
+		                                            	<div>
+		                                            		<img src="{{ url_for('static', filename='personal.png') }}" height="50%" width="50%">
+		                                            	</div>
+		                                            	{% elif task.label=='shopping' %}
+		                                            	<div>
+		                                            		<img src="{{ url_for('static', filename='shopping.jpeg') }}" height="50%" width="50%">
+		                                            	</div>
+		                                            	{% elif task.label=='other' %}
+		                                            	<div>
+		                                            		<img src="{{ url_for('static', filename='other.jpeg') }}" height="50%" width="50%">
+		                                            	</div>
+		                                            	{% endif %}
+		                                            </div>
+		                                            <div class="widget-content-left">
+		                                                <div class="widget-heading">
+		                                                	<h4>{{task.title}}</h4>	<div class="badge badge-danger ml-2">{{task.priority}}</div>
+		                                                </div>
+		                                                <div ><i><h4>{{task.status}}</h4></i></div>
+		                                                <div class="widget-subheading">
+		                                                    <div><h4>Added on</h4> <div class="badge badge-pill badge-info ml-8">{{task.duedate}}</div>
+		                                                   </div>
+		                                                </div>
+		                                            </div>
+
+		                                            <div class="widget-content-right">
+
+		                                            	<button class="border-0 btn-transition btn btn-outline-success" value="ON" id="done" onclick="task_done(this);"> <i class="fa fa-check"></i></button>
+		                                            	
+		                                             </div>
+		                                        </div>
+		                                    </div>
+		                                </li>
+
+		                                {% endfor %}
+
+
+		                            </ul>
+		                        </div>
+		                    </div>
+		                </perfect-scrollbar>
+		            </div>
+		            
+		    </div>
+		</div>
 
 
 
-{% endfor %}
-</div>
+
+
+
 
 </section>
 </div>
