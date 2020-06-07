@@ -37,9 +37,9 @@ from PIL import Image
 
 from todo import app, db, bcrypt
 from todo.model import User, Tasks
-from todo.util import checkavl, send_email, verify_email
+from todo.util import checkavl, send_email, verify_email, label_stat
 
-allowed_extensions = ["jpg", "png", "ppm"]
+allowed_extensions = ["jpg", "png", "ppm",'jpeg']
 
 app.config["GITHUB_OAUTH_CLIENT_ID"] = "0cd2c183c8cefac1daf6"
 app.config["GITHUB_OAUTH_CLIENT_SECRET"] = "bd615912c583831900cda5bb8c27856664e18d6c"
@@ -72,6 +72,8 @@ def home():
 
 @app.route("/about")
 def about():
+
+
     """
 
     """
@@ -96,10 +98,14 @@ def account():
     curr_user = current_user.id
     pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)
     var = request.args.get("my_var")
-
     if var == "send_mail":
         send_email(curr_user)
-
+    personal,work,shopping,other=label_stat()
+    prefr_info=[]
+    prefr_info.append(personal*100)
+    prefr_info.append(work*100)
+    prefr_info.append(shopping*100)
+    prefr_info.append(other*100)
     if request.method == "POST":
         file = request.files.get("file")
         if file:
@@ -109,7 +115,7 @@ def account():
         else:
             flash(u"choose a file to upload","error")
         return redirect(url_for("account"))
-    return render_template("account.html", pro_pic=pro_pic)
+    return render_template("account.html", pro_pic=pro_pic,prefr_info=prefr_info)
 
 
 @app.route("/loging")

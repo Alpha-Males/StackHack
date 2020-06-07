@@ -5,8 +5,22 @@ import smtplib
 import dns.resolver
 
 from flask import flash
-
+from flask_login import current_user
 from todo.model import User,Tasks
+
+
+def label_stat():
+    pcount=Tasks.query.filter_by(label='personal',user_id=current_user.id).count()
+    wcount=Tasks.query.filter_by(label='work',user_id=current_user.id).count()
+    scount=Tasks.query.filter_by(label='shopping',user_id=current_user.id).count()
+    ocount=Tasks.query.filter_by(label='other',user_id=current_user.id).count()
+    total=pcount+wcount+scount+ocount
+
+    personal=pcount/total
+    work=wcount/total
+    shopping=scount/total
+    other=ocount/total
+    return personal,work,shopping,other
 
 def verify_email(email):
     """
@@ -34,7 +48,7 @@ def verify_email(email):
 
 def send_email(curr_user):
     """
-
+label = ["personal", "work", "shopping", "other"]
     """
     try:
         user=User.query.filter_by(id=curr_user).first()
@@ -44,16 +58,24 @@ def send_email(curr_user):
         sender_email = "stackhackforme@gmail.com"
         receiver_email = user.email
         password = 'stackhack@123$'
-
-        task_info=[]
-        for i in task:
-            task_info.append(i.title)
+        personal,work,shopping,other=label_stat()
+        data=''
+        for i,j in enumerate(task):
+            data +='{} '.format(i)+'{}'.format(j.title)+' added by you '+'{}'.format(j.adddate.date())+'\n'
+        print(data)
         message = """\
         Subject: Task for the day.
-
         hi {} hopes you are doing fine
         here are your task for the day.
-        Tasks {}.""".format(user.username,task_info)
+        your analysis for the week
+
+        Personal {} %
+        work {} %
+        shopping {} %
+        other {} %
+        your due tasks
+        {}.""".format(user.username,personal*100,work*100,shopping*100,other*100,data)
+
 
         context = ssl.create_default_context()
 

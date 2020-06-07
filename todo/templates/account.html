@@ -5,25 +5,27 @@
 
       <div class="left-part">
          <img src="{{ pro_pic }}"  class="rounded-circle" style="width:200px;height:180px;">
-      
+
          <div class="media-body">
           <h3 class="account-heading" style="color: #00AFAF;">{{ current_user.username }}</h3>
           <h3 class="text-secondary">{{ current_user.email }}</h3>
         </div>
       </div>
-      
+
       <form class="reg" method="POST" action="" enctype="multipart/form-data">
           <div>
             <input class="inp" type="file" name="file">
-        
+
               <button class="butt" type="submit" name="upload" style="width: 35%">upload</button>
-    
+
             </div>
             <div>
+    </form>
+     </div>
      <button class ="butt btn-success" style="width: 70%" onclick="window.location.href='{{ url_for('account', my_var='send_mail' ) }}'">Send Mail of My Tasks</button>
 
-          </div>                   
-      </form>
+
+
 
 </div>
 {% endblock %}
