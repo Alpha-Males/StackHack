@@ -2,5 +2,152 @@
 {% block content %}
 
 
+{% if current_user.is_authenticated %}
+
+		<!-- Modal -->
+		<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLongTitle">Add new Task</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+					     <form action="#" method="post" novalidate="novalidate">
+					      <div class="modal-body">
+					      		<div class="row">
+					                <div class="col-lg-12">
+					                		Enter Title:
+		            						<input type="text" name="title" class="form-control search-slt" placeholder="title" required>
+					         
+					                </div>
+					             </div>
+					                  <br>
+					            <div class="row">
+					                <div class="col-lg-12">
+					                   
+					                    <div class="row">
+					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+					                            <input type="date" name="duedate" class="form-control search-slt" placeholder="Probable DueDate">
+					                        </div>
+					                        
+					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+					                          <select class="form-control search-slt" id="exampleFormControlSelect1" name="status" >
+					                            {% for o in status %}
+					                            <option value="{{ o }}">{{ o }}</option>
+					                            {% endfor %}
+					                          </select>
+
+					                        </div>
+
+					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+					                          <select class="form-control search-slt" id="exampleFormControlSelect1" name="priority" >
+					                           {% for o in priority %}
+					                            <option value="{{ o }}">{{ o }}</option>
+					                           {% endfor %}
+					                          </select>
+
+					                        </div>
+
+					                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+					                         <select class="form-control search-slt" id="exampleFormControlSelect1" name="label">
+					                          {% for o in label %}
+					                          <option value="{{ o }}">{{ o }}</option>
+					                          {% endfor %}
+					                        </select>
+
+					                        </div>
+
+					                        
+					                    </div>
+					                </div>
+					            </div>
+		      
+				      		</div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					    <button class="btn btn-outline-success wrn-btn" type="submit" >submit</button>
+				        
+				      </div>
+		        </form>
+		    </div>
+		  </div>
+		</div>
+
+
+		<div class="row d-flex justify-content-center container-c">
+		    <div class="col-md-8">
+		        <div class="card-hover-shadow-2x mb-3 card">
+		            <div class="card-header-tab card-header">
+		                <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Today's Task List</div>
+		            </div>
+		            <div class="scroll-area-sm">
+		                <perfect-scrollbar class="ps-show-limits">
+		                    <div style="position: static;" class="ps ps--active-y">
+		                        <div class="ps-content">
+		                            <ul class=" list-group list-group-flush">
+
+		                            	{% for task in tasks %}
+
+
+		                            	<li class="list-group-item">
+		                                    <div class="todo-indicator bg-warning"></div>
+		                                    <div class="widget-content p-0">
+		                                        <div class="widget-content-wrapper">
+		                                            <div class="widget-content-left mr-2">
+		                                            	<div>
+		                                            		<img src="{{ url_for('static', filename='work.jpeg') }}" height="50%" width="50%">
+		                                            	</div>
+		                                               
+		                                            </div>
+		                                            <div class="widget-content-left">
+		                                                <div class="widget-heading">
+		                                                	<h4>{{task.title}}</h4>	<div class="badge badge-danger ml-2">{{task.priority}}</div>
+		                                                </div>
+		                                                <div ><i>{{task.status}}</i></div>
+		                                                <div class="widget-subheading">
+		                                                    <div>Added on <div class="badge badge-pill badge-info ml-8">{{task.duedate}}</div>
+		                                                   </div>
+		                                                </div>
+		                                            </div>
+		                                             
+		                                            <div class="widget-content-right"> 
+
+		                                            	<button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button><button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button>
+		                                             </div>
+		                                        </div>
+		                                    </div>
+		                                </li>
+
+		                                {% endfor %}
+
+		                                
+		                            </ul>
+		                        </div>
+		                    </div>
+		                </perfect-scrollbar>
+		            </div>
+		            <div class="d-block text-right card-footer"><button class="mr-2 btn btn-link btn-sm" ><a href="/tasks">All-Tasks</a></button>
+		            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+					  Add
+					</button>
+		            	
+		        </div>
+		    </div>
+		</div>
+
+{% else %}
+
+	<div class="container" style="align-items: center;">
+		<h1 >Welcome</h1>
+		<h3 style=" color: #00AFAF;">Please Login to access ToDo app</h3>
+	</div>
+
+
+{% endif %}
 
 {% endblock content %}

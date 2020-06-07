@@ -14,18 +14,17 @@ logout -->
 
 """
 
-# User Auth with REST architecture is provided only after doing some research.
-# Apart from User Auth everything must interact with ORM throug a middleware having REST architecture
 
 
-# key = crpt.key_derive(b"data")  # api to calculate key using PKCS7
-# crpt.key_verify(b"data", key)  # api to verify the key
+
 
 from datetime import datetime
 import os
 import requests
+import re
 import secrets
 import hashlib
+
 
 # import urllib
 
@@ -38,7 +37,7 @@ from PIL import Image
 
 from todo import app, db, bcrypt
 from todo.model import User, Tasks
-
+from todo.util import checkavl, send_email, verify_email
 
 allowed_extensions = ["jpg", "png", "ppm"]
 
@@ -48,11 +47,10 @@ github_bp = make_github_blueprint()
 app.register_blueprint(github_bp, url_prefix="/login")
 
 
-def checkavl(email, username):
-    user = User.query.filter_by(username=username).first()
-    if user:
-        return False
-    return True
+
+class RouteException(Exception):
+    pass
+
 
 
 @app.route("/")
@@ -60,7 +58,16 @@ def home():
     """
     page for login and signup
     """
-    return render_template("home.html")
+    task=[]
+    if current_user.is_authenticated:
+        curr_user = current_user
+        date=datetime.now()
+        date=str(date.date())
+        due_date = datetime.strptime(date, "%Y-%m-%d")
+        task = Tasks.query.filter_by(duedate=due_date).all()
+        print(task)
+    print(task)
+    return render_template("home.html",tasks=task)
 
 
 @app.route("/about")
@@ -71,7 +78,7 @@ def about():
     return render_template("about.html")
 
 
-def save_and_upload(file):
+def save_and_upload(file):   
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(file.filename)
     picture_fn = random_hex + f_ext
@@ -86,12 +93,21 @@ def save_and_upload(file):
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)
+    curr_user = current_user.id
+    pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)    
+    var = request.args.get("my_var")
+    
+    if var == "send_mail":
+        send_email(curr_user)
+    
     if request.method == "POST":
         file = request.files.get("file")
-        picture_file = save_and_upload(file)
-        current_user.image_file = picture_file
-        db.session.commit()
+        if file:
+            picture_file = save_and_upload(file)
+            current_user.image_file = picture_file
+            db.session.commit()
+        else:
+            flash(u"choose a file to upload","error")
         return redirect(url_for("account"))
     return render_template("account.html", pro_pic=pro_pic)
 
@@ -132,7 +148,7 @@ def login():
             login_user(user)
             return redirect(url_for("tasks"))
         else:
-            flash(u"Invalid password provided", "error")
+            flash(u"Validation Error", "error")
             return redirect("/login")
     return render_template("login.html")
 
@@ -141,30 +157,29 @@ def login():
 def register():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    fields = {}
-    fields["route"] = "register"
-
+    #fields = {}
+    #fields["route"] = "register"
+	    
     if request.method == "POST":
         username = request.form.get("username")
         email = request.form.get("email")
-        password = request.form.get("password")
-        confirm = request.form.get("confirm")
-
-        if password == confirm and checkavl(email, username):
-            hashed_password = hashlib.sha224(password.encode("utf-8")).hexdigest()
-            print(hashed_password)
-            fields["username"] = username
-            fields["email"] = email
-            fields["password"] = hashed_password
-            # API to interact with backend to POST data
-            res = requests.post("http://127.0.0.1:5000/todores/id", data=fields)
-            if res:
-                pass
-                # ...
-            return redirect(url_for("login"))
-
+        match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email)
+        if match == None or verify_email(email)!=250:
+            flash(u"please provide a valid email address", "error")
+            print("valid email")
         else:
-            flash(u"validation error", "error")
+            password = request.form.get("password")
+            confirm = request.form.get("confirm")
+            if password == confirm and checkavl(email, username):
+                hashed_password = hashlib.sha224(password.encode("utf-8")).hexdigest()
+                user = User(username=username, email=email, password=hashed_password)
+                db.session.add(user)
+                db.session.commit()
+                return redirect(url_for("login"))
+                print("loggedin")
+            else:
+                print("error")
+                flash(u"validation error", "error")
 
     return render_template("register.html")
 
@@ -197,25 +212,29 @@ def tasks():
 @app.route("/query_tasks", methods=["GET", "POST"])
 @login_required
 def query_task():
-
+    curr_user = current_user.id
     priority = ["argent", "important", "do-it-now"]
     label = ["personal", "work", "shopping", "other"]
     status = ["new", "progess", "completed"]
 
     if request.method == "POST":
         due_date = request.form.get("duedate")
-        priority = request.form.get("priority")
-        status = request.form.get("status")
-        label = request.form.get("label")
-
-        task = Tasks.query.filter_by(
-            priority=priority, duedate=due_date, user_id=curr_user
-        ).all()
-        id = ""
-        for i in task:
-            id += ":" + str(i.id)
-        return redirect(url_for("tasks", id=id))
-
+        if due_date:
+            due_date = datetime.strptime(due_date, "%Y-%m-%d")
+            priority = request.form.get("priority")
+            status = request.form.get("status")
+            label = request.form.get("label")
+            
+            task = Tasks.query.filter_by(
+                priority=priority, duedate=due_date, user_id=curr_user
+            ).all()
+            
+            id = ""
+            for i in task:
+                id += ":" + str(i.id)
+            return redirect(url_for("tasks", id=id))
+        else:
+            flash(u"please choose a duedate its mandetory","error")
     return render_template(
         "query_task.html", priority=priority, label=label, status=status
     )
@@ -244,25 +263,22 @@ def add_task():
         title = request.form.get("title")
         add_date = datetime.now()
         due_date = request.form.get("duedate")
+        due_date = datetime.strptime(due_date, "%Y-%m-%d")
         priority = request.form.get("priority")
         status = request.form.get("status")
         label = request.form.get("label")
-
-        fields = {}
-        fields["route"] = "add_task"
-        fields["title"] = title
-        fields["add_date"] = add_date
-        fields["due_date"] = due_date
-        fields["priority"] = priority
-        fields["status"] = status
-        fields["label"] = label
-        fields["curr_user"] = curr_user
-
-        # API to interact with backend to POST data
-        res = requests.post("http://127.0.0.1:5000/todores/id", data=fields)
-        if res:
-            pass
-            # ...
+        #due date must be selected
+        task = Tasks(
+            title=title,
+            adddate=add_date,
+            duedate=due_date,
+            priority=priority,
+            status=status,
+            label=label,
+            user_id=curr_user,
+        )
+        db.session.add(task)
+        db.session.commit()
         return redirect(url_for("home"))
     return render_template(
         "add_task.html", priority=priority, label=label, status=status

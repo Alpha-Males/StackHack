@@ -1,18 +1,21 @@
 {% extends "layout.html"%}
 {% block content %}
  
+ <div class="container">    
 <div class="main-block">
    
       <div class="left-part">
-        <i class="fas fa-graduation-cap"></i>
+       
         <h1>Register to ToDo App</h1>
         <div class="btn-group">
-          <a class="btn-item" href="/login">Already have account</a>
+           <a class="btn-item" onclick="window.location.href='{{ url_for('loging', my_var='regg' ) }}'">Login Using github</a>
+          <a class="btn-item" href="/login">Already have ToDo account</a>
         </div>
       </div>
+      
       <form class="reg" action="" method="POST">
         <div class="title">
-          <i class="fas fa-pencil-alt"></i> 
+          
           <h2>Register here</h2>
         </div>
         <div class="info">
@@ -27,4 +30,6 @@
       </form>
     
 </div>
+</div>
 {% endblock %}
+
