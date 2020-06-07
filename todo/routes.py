@@ -21,13 +21,10 @@ logout -->
 from datetime import datetime
 import os
 import requests
+import re
 import secrets
 import hashlib
-import smtplib, ssl
-import re
-import socket
-import smtplib
-import dns.resolver
+
 
 # import urllib
 
@@ -40,7 +37,7 @@ from PIL import Image
 
 from todo import app, db, bcrypt
 from todo.model import User, Tasks
-
+from todo.util import checkavl, send_email, verify_email
 
 allowed_extensions = ["jpg", "png", "ppm"]
 
@@ -54,63 +51,6 @@ app.register_blueprint(github_bp, url_prefix="/login")
 class RouteException(Exception):
     pass
 
-
-def verify_email(email):
-    """
-
-    """
-    records = dns.resolver.query('emailhippo.com', 'MX')
-    mxRecord = records[0].exchange
-    mxRecord = str(mxRecord)
-
-    # Get local server hostname
-    host = socket.gethostname()
-
-    # SMTP lib setup (use debug level for full output)
-    server = smtplib.SMTP()
-    server.set_debuglevel(0)
-
-    # SMTP Conversation
-    server.connect(mxRecord)
-    server.helo(host)
-    server.mail('smtp@gmail.com')
-    code, message = server.rcpt(email)
-    server.quit()
-
-    return code
-
-def send_email(curr_user):
-    user=User.query.filter_by(id=curr_user).first()
-    task=Tasks.query.filter_by(user_id=curr_user).all()
-    port = 465  
-    smtp_server = "smtp.gmail.com"
-    sender_email = "stackhackforme@gmail.com"  
-    receiver_email = user.email  
-    password = 'stackhack@123$'
-    
-    task_info=[]
-    for i in task:
-        task_info.append(i.title)
-    message = """\
-    Subject: Task for the day.
-
-    hi {} hopes you are doing fine
-    here are your task for the day.
-    Tasks {}.""".format(user.username,task_info)
-
-    context = ssl.create_default_context()
-    
-    with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message)
-
-
-
-def checkavl(email, username):
-    user = User.query.filter_by(username=username).first()
-    if user:
-        return False
-    return True
 
 
 @app.route("/")
@@ -226,6 +166,7 @@ def register():
                 db.session.add(user)
                 db.session.commit()
                 return redirect(url_for("login"))
+                print("loggedin")
             else:
                 flash(u"validation error", "error")
 
