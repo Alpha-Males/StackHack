@@ -78,7 +78,7 @@ def about():
     return render_template("about.html")
 
 
-def save_and_upload(file):   
+def save_and_upload(file):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(file.filename)
     picture_fn = random_hex + f_ext
@@ -94,12 +94,12 @@ def save_and_upload(file):
 @login_required
 def account():
     curr_user = current_user.id
-    pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)    
+    pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)
     var = request.args.get("my_var")
-    
+
     if var == "send_mail":
         send_email(curr_user)
-    
+
     if request.method == "POST":
         file = request.files.get("file")
         if file:
@@ -159,7 +159,7 @@ def register():
         return redirect(url_for("home"))
     #fields = {}
     #fields["route"] = "register"
-	    
+
     if request.method == "POST":
         username = request.form.get("username")
         email = request.form.get("email")
@@ -213,7 +213,7 @@ def tasks():
 @login_required
 def query_task():
     curr_user = current_user.id
-    priority = ["argent", "important", "do-it-now"]
+    priority = ["urgent", "important", "do-it-now"]
     label = ["personal", "work", "shopping", "other"]
     status = ["new", "progess", "completed"]
 
@@ -224,11 +224,11 @@ def query_task():
             priority = request.form.get("priority")
             status = request.form.get("status")
             label = request.form.get("label")
-            
+
             task = Tasks.query.filter_by(
                 priority=priority, duedate=due_date, user_id=curr_user
             ).all()
-            
+
             id = ""
             for i in task:
                 id += ":" + str(i.id)
@@ -247,7 +247,7 @@ def add_task():
     title,
     adddate,
     duedate,
-    priority -> ['argent', 'important', 'do-it-now'],
+    priority -> ['urgent', 'important', 'do-it-now'],
     label -> [personal, work, shopping, other],
     status -> [new, progess, completed]
     A REST api call to insert data into the database
@@ -256,7 +256,7 @@ def add_task():
     """
     curr_user = current_user.id
     print(curr_user)
-    priority = ["argent", "important", "do-it-now"]
+    priority = ["Urgent", "important", "do-it-now"]
     label = ["personal", "work", "shopping", "other"]
     status = ["new", "progess", "completed"]
     if request.method == "POST":
