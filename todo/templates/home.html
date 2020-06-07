@@ -3,4 +3,217 @@
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Add a new Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+
+						<section class="search-sec">
+						    <div class="container">
+						        <form action="#" method="post" novalidate="novalidate">
+						            
+						             <div class="row">
+						                      <div class=" col-sm-12 p-0">
+						                      		Enter Title:
+           											 <input type="text" class="form-control search-slt" name="title"  placeholder="title" required>
+						                            
+						                        </div>
+						              </div>
+						              <br>
+
+						            <div class="row">
+						                <div class="col-lg-12">
+						                   
+
+						                    <div class="row">
+
+
+						                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+						                            <input type="date" name="duedate" class="form-control search-slt" placeholder="Probable DueDate">
+						                        </div>
+						                        
+						                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+						                          <select class="form-control search-slt" id="exampleFormControlSelect1" name="status" >
+						                            {% for o in status %}
+						                            <option value="{{ o }}">{{ o }}</option>
+						                            {% endfor %}
+						                          </select>
+
+						                        </div>
+
+						                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+						                          <select class="form-control search-slt" id="exampleFormControlSelect1" name="priority" >
+						                           {% for o in priority %}
+						                            <option value="{{ o }}">{{ o }}</option>
+						                           {% endfor %}
+						                          </select>
+
+						                        </div>
+
+						                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+
+						                         <select class="form-control search-slt" id="exampleFormControlSelect1" name="label">
+						                          {% for o in label %}
+						                          <option value="{{ o }}">{{ o }}</option>
+						                          {% endfor %}
+						                        </select>
+
+						                        </div>
+
+						                        <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+						      
+						                            <button class="btn btn-danger wrn-btn" type="submit" >submit</button>
+						                        </div>
+						                    </div>
+						                </div>
+						            </div>
+						        </form>
+						    </div>
+						</section>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row d-flex justify-content-center container-c">
+    <div class="col-md-8">
+        <div class="card-hover-shadow-2x mb-3 card">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Task Lists</div>
+            </div>
+            <div class="scroll-area-sm">
+                <perfect-scrollbar class="ps-show-limits">
+                    <div style="position: static;" class="ps ps--active-y">
+                        <div class="ps-content">
+                            <ul class=" list-group list-group-flush">
+
+                            	{% for task in tasks %}
+
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-warning"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control"> <input class="custom-control-input" id="exampleCustomCheckbox12" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label> </div>
+                                            </div>
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">{{ task.title }} <div class="badge badge-danger ml-2">{{ task.priority }}</div>
+                                                </div>
+                                                <div class="widget-subheading"><i>By Bob</i></div>
+                                            </div>
+                                            <div class="widget-content-right"> <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button> <button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                {% endfor %}
+
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-focus"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control"><input class="custom-control-input" id="exampleCustomCheckbox1" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox1">&nbsp;</label></div>
+                                            </div>
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">Make payment to Bluedart</div>
+                                                <div class="widget-subheading">
+                                                    <div>By Johnny <div class="badge badge-pill badge-info ml-2">NEW</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="widget-content-right"> <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button> <button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> </div>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-primary"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control"><input class="custom-control-input" id="exampleCustomCheckbox4" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox4">&nbsp;</label></div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">Office rent </div>
+                                                <div class="widget-subheading">By Samino!</div>
+                                            </div>
+                                            <div class="widget-content-right"> <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button> <button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-info"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control"><input class="custom-control-input" id="exampleCustomCheckbox2" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox2">&nbsp;</label></div>
+                                            </div>
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">Office grocery shopping</div>
+                                                <div class="widget-subheading">By Tida</div>
+                                            </div>
+                                            <div class="widget-content-right"> <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button> <button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-success"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control"><input class="custom-control-input" id="exampleCustomCheckbox3" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox3">&nbsp;</label></div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">Ask for Lunch to Clients</div>
+                                                <div class="widget-subheading">By Office Admin</div>
+                                            </div>
+                                            <div class="widget-content-right"> <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button> <button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="todo-indicator bg-success"></div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+                                            <div class="widget-content-left mr-2">
+                                                <div class="custom-checkbox custom-control"><input class="custom-control-input" id="exampleCustomCheckbox10" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox10">&nbsp;</label></div>
+                                            </div>
+                                            <div class="widget-content-left flex2">
+                                                <div class="widget-heading">Client Meeting at 11 AM</div>
+                                                <div class="widget-subheading">By CEO</div>
+                                            </div>
+                                            <div class="widget-content-right"> <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button> <button class="border-0 btn-transition btn btn-outline-danger"> <i class="fa fa-trash"></i> </button> </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+            <div class="d-block text-right card-footer"><button class="mr-2 btn btn-link btn-sm">Cancel</button><button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Add Task</button></div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock content %}
