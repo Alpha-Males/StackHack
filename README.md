@@ -11,7 +11,7 @@
 ---------------------------------
     *Daily email updates about you pending tasks.
     *Email validation with the dns so that the app can't be bluffed with wrong email.
-    *Login using github is provided which is an importent feature for future update the application.
+    *Login using github is provided which is an important feature for future updates of the application.
 
 
 
@@ -31,7 +31,7 @@ else
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt && pip3 install -r requirements.txt
-run python3 run.py
+python3 run.py
 ```
 
 
