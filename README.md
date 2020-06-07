@@ -10,8 +10,8 @@
 **features**
 ---------------------------------
     *Daily email updates about you pending tasks.
-    *Email validation with the dns so that the app can't be buffed with wrong email.
-    *Login using github is provided which is an importent feature for further update the application.
+    *Email validation with the dns so that the app can't be bluffed with wrong email.
+    *Login using github is provided which is an importent feature for future update the application.
 
 
 
@@ -45,7 +45,7 @@ run python3 run.py
 - [x] Use flask-restful to interact with REST-API.
 - [x] Improve UI using bootstrap.
 - [x] Add login using github.
-- [] Come up with an algorithm to sort task on the basis of priority due_date label and status.
+- [ ] Come up with an algorithm to sort task on the basis of priority due_date label and status.
 
 
 **Contributing**
