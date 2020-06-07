@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
+
 <div class="container">
+
     <h1>Add a new Task</h1>
-    <form action="" method="POST">
-    <div class="form-group">
-    		Enter Title:
+
+    <form class="reg" action="" method="POST">
+    <div class="info">
+    	     	Enter Title:
             <input type="text" name="title"  placeholder="title" required>
             </br>
             Probable DueDate:
@@ -28,8 +31,11 @@
               <option value="{{ o }}">{{ o }}</option>
               {% endfor %}
             </select>
-   </div>
-   <button class="btn btn-primary" type="submit" >submit</button>
-</form>
+      </div>
+        <button class="btn btn-primary" type="submit">submit</button>
+    </form>
 </div>
+
+</div>
+
 {% endblock content %}

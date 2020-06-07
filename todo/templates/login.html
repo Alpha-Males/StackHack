@@ -5,17 +5,26 @@
 
       {% endif %}
     {% endwith %}
+
+
+ <div class="container">   
   <div class="main-block">
     <div class="left-part">
-        <i class="fas fa-graduation-cap"></i>
+        
         <h1>Login to ToDo App</h1>
+
+            
         <div class="btn-group">
-          <a class="btn-item" href="/register">Do not have account</a>
+           <a class="btn-item" href="/register">Do not have account</a>
+           <a class="btn-item" onclick="window.location.href='{{ url_for('loging', my_var='regg' ) }}'">Login Using github</a>
         </div>
-        <div class="btn-group">
-          <button class = btn-success onclick="window.location.href='{{ url_for('loging', my_var='regg' ) }}'">Login Using github</button>
-        </div>
-      </div>
+       
+      
+
+  
+        
+        
+    </div>
 
     <form class="reg" action="" method="POST">
         <div class="title">
@@ -31,6 +40,7 @@
 
         <button class="butt" class="btn btn-outline-info" type="submit">Submit</button>
     </form>
+</div>
 </div>
 {% endblock %}
 
