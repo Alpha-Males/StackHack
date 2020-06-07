@@ -57,13 +57,21 @@
 		                                            	{% endif %}
 		                                            </div>
 		                                            <div class="widget-content-left">
+
 		                                                <div class="widget-heading">
-		                                                	<h4>{{task.title}}</h4>	<div class="badge badge-danger ml-2">{{task.priority}}</div>
+		                                                	<h4>{{task.title}}</h4>	
+		                                                	<div class="badge badge-danger ml-2">{{task.priority}}</div>
 		                                                </div>
-		                                                <div ><i><h4>{{task.status}}</h4></i></div>
+
+		                                                <div class="badge badge-primary ml-2"><p>{{task.status}}</p></div>
+		                                                
+		                                                
 		                                                <div class="widget-subheading">
-		                                                    <div><h4>Added on</h4> <div class="badge badge-pill badge-info ml-8">{{task.duedate}}</div>
-		                                                   </div>
+		                                                	<div class="row">
+		                                                		<div class="col-md-4"><h5>Due on</h5></div>
+		                                                		<div class="col-md-4"><div class="badge badge-pill badge-info ml-8"><p>{{task.duedate}}</p></div></div>
+		                                                	</div>
+		                                                    
 		                                                </div>
 		                                            </div>
 
