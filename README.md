@@ -82,9 +82,6 @@ run python3 run.py
 
     
 
-**Architecture**
-----------------
-![StackHack](StackHack.png)
 
 
 
