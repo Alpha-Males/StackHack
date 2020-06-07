@@ -1,23 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="content-section">
+
+<div class="container-c">
+
+<section class="search-sec">
+
   <div class="row">
 {% for task in tasks %}
 
 
-    <div class="col-sm">
+    <div class="col-sm-2">
 
 		<div class="card" style="width: 18rem;">
 		  <img class="card-img-top" src="{{ url_for('static', filename='work.jpeg') }}" alt="Card image cap">
 		  <div class="card-body">
-		    <h5 class="card-title">Card title</h5>
-			    <p>{{ task.title }}</p>
-				<p>{{ task.adddate }}</p>
-				<p>{{ task.duedate }}</p>
-				<p>{{ task.priority }}</p>
-				<p>{{ task.label }}</p>
-		    <a href="#" class="btn btn-primary">Go somewhere</a>
+		    <h5 style="text-transform: uppercase;" class="card-title">{{ task.title }}</h5>
+		    <ul class="list-group list-group-flush">
+			    <li class="list-group-item">{{ task.adddate }}</li>
+			    <li class="list-group-item">{{ task.duedate }}</li>
+			    <li class="list-group-item">{{ task.label }}</li>
+			     <li class="list-group-item">
+			    	<div class="badge badge-danger ml-2">{{ task.priority }}</div>
+				</li>
+		                                              
+			 </ul>
+			   
+		    <a style="margin-top: 10px" href="#" class="btn btn-primary">Edit</a>
+		    <a style="margin-top: 10px" href="#" class="btn btn-danger">Remove</a>
 		  </div>
 
  </div>
@@ -29,5 +39,7 @@
 
 {% endfor %}
 </div>
+
+</section>
 </div>
 {% endblock content %}
