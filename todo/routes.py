@@ -64,7 +64,7 @@ def home():
         date=datetime.now()
         date=str(date.date())
         due_date = datetime.strptime(date, "%Y-%m-%d")
-        task = Tasks.query.filter_by(duedate=due_date).all()
+        task = Tasks.query.filter_by(duedate=due_date,user_id=current_user.id).all()
         print(task)
     print(task)
     return render_template("home.html",tasks=task)
@@ -170,7 +170,8 @@ def register():
         else:
             password = request.form.get("password")
             confirm = request.form.get("confirm")
-            if password == confirm and checkavl(email, username):
+            msg=checkavl(email, username)
+            if password == confirm and msg=='Everything fine':
                 hashed_password = hashlib.sha224(password.encode("utf-8")).hexdigest()
                 user = User(username=username, email=email, password=hashed_password)
                 db.session.add(user)
@@ -179,7 +180,7 @@ def register():
                 print("loggedin")
             else:
                 print("error")
-                flash(u"validation error", "error")
+                flash(msg, "error")
 
     return render_template("register.html")
 
