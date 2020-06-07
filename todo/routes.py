@@ -58,7 +58,16 @@ def home():
     """
     page for login and signup
     """
-    return render_template("home.html")
+    task=[]
+    if current_user.is_authenticated:
+        curr_user = current_user
+        date=datetime.now()
+        date=str(date.date())
+        due_date = datetime.strptime(date, "%Y-%m-%d")
+        task = Tasks.query.filter_by(duedate=due_date).all()
+        print(task)
+    print(task)
+    return render_template("home.html",tasks=task)
 
 
 @app.route("/about")
