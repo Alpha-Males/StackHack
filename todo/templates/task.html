@@ -16,13 +16,13 @@
 		  {% if task.label=='work' %}
    		 <img class="card-img-top" src="{{ url_for('static', filename='work.jpeg') }}" alt="Card image cap">
     	{% elif task.label=='personal' %}
-    	<img class="card-img-top" src="{{ url_for('static', filename='personal.jpeg') }}" alt="Card image cap">
+    	<img class="card-img-top" src="{{ url_for('static', filename='personal.png') }}" alt="Card image cap">
     	{% elif task.label=='shopping' %}
     	<img class="card-img-top" src="{{ url_for('static', filename='shopping.jpeg') }}" alt="Card image cap">
     	{% elif task.label=='other' %}
     	<img class="card-img-top" src="{{ url_for('static', filename='other.jpeg') }}" alt="Card image cap">
     	{% endif %}
-		  <img class="card-img-top" src="{{ url_for('static', filename='work.jpeg') }}" alt="Card image cap">
+
 		  <div class="card-body">
 		    <h5 style="text-transform: uppercase;" class="card-title">{{ task.title }}</h5>
 		    <ul class="list-group list-group-flush">
