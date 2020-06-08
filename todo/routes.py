@@ -121,22 +121,24 @@ def account():
 
 @app.route("/loging")
 def loging():
-    if not github.authorized:
-        flash('currently there is some problem with github login. please use some other method','error')
-        return redirect(url_for('login'))
-    resp = github.get("/user")
-    username = resp.json()["login"]
-    email = resp.json()["email"]
-    print(username, email)
-    user = User.query.filter_by(username=username).first()
-    if user == None and checkavl(email, username) == True:
-        user = User(username=username, email=email, password="no need")
-        db.session.add(user)
-        db.session.commit()
+    flash('currently there is some problem with github login. please use some other method','error')
+    return redirect(url_for('login'))
+    #if not github.authorized:
+     #   flash('currently there is some problem with github login. please use some other method','error')
+      #  return redirect(url_for('login'))
+    #resp = github.get("/user")
+    #username = resp.json()["login"]
+    #email = resp.json()["email"]
+    #print(username, email)
+    #user = User.query.filter_by(username=username).first()
+    #if user == None and checkavl(email, username) == True:
+     #   user = User(username=username, email=email, password="no need")
+      #  db.session.add(user)
+      #  db.session.commit()
     # else:
     # login_user(user)
-    login_user(user)
-    return redirect(url_for("tasks"))
+    #login_user(user)
+    #return redirect(url_for("tasks"))
 
 
 @app.route("/login", methods=["GET", "POST"])
