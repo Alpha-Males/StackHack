@@ -99,7 +99,8 @@ def account():
     pro_pic = url_for("static", filename="profile_pics/" + current_user.image_file)
     var = request.args.get("my_var")
     if var == "send_mail":
-        send_email(curr_user)
+        if send_email(curr_user)=='sent':
+            flash("please check your mail","success")
     personal,work,shopping,other=label_stat()
     prefr_info=[]
     prefr_info.append(personal*100)
