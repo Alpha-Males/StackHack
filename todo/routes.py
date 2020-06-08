@@ -122,7 +122,8 @@ def account():
 @app.route("/loging")
 def loging():
     if not github.authorized:
-        return redirect(url_for("github.login"))
+        flash('currently there is some problem with github login. please use some other method','error')
+        return redirect(url_for('login'))
     resp = github.get("/user")
     username = resp.json()["login"]
     email = resp.json()["email"]
