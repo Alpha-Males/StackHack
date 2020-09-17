@@ -9,9 +9,9 @@
 
 **features**
 ---------------------------------
-    *Daily email updates about you pending tasks.
-    *Email validation with the dns so that the app can't be bluffed with wrong email.
-    *Login using github is provided which is an important feature for future updates of the application.
+    * Daily email updates about you pending tasks.
+    * Email validation with the dns so that the app can't be bluffed with wrong email.
+    * Login using github is provided which is an important feature for future updates of the application.
 
 
 
@@ -34,7 +34,7 @@ pip install -r requirements.txt && pip3 install -r requirements.txt
 python3 run.py
 ```
 
-
+set environment variables EMAIL and EMAIL_PASS for sending email to your users.
 
 
 
